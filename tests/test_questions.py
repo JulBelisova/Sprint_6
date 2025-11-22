@@ -8,7 +8,6 @@ class TestQuestions:
 
     @classmethod
     def setup_class(cls):
-        # создали драйвер для браузера Chrome
         cls.driver = webdriver.Firefox()
 
     def test_question_1(self, driver):

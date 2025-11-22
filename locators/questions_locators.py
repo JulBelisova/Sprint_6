@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 
 class QuestionLocatorsPage:
+    accept_cookies = [By.ID, 'rcc-confirm-button']
     logo = [By.XPATH, ".//div[@class ='Home_Header__iJKdX']"]
     question_1 = [By.ID, 'accordion__heading-0']
     answer_1 = [By.XPATH, ".//div[@class = 'accordion__panel'][@aria-labelledby = 'accordion__heading-0']//p"]
@@ -18,3 +19,5 @@ class QuestionLocatorsPage:
     answer_7 = [By.XPATH, ".//div[@class = 'accordion__panel'][@aria-labelledby = 'accordion__heading-6']//p"]
     question_8 = [By.ID, 'accordion__heading-7']
     answer_8 = [By.XPATH, ".//div[@class = 'accordion__panel'][@aria-labelledby = 'accordion__heading-7']//p"]
+
+

@@ -14,6 +14,10 @@ class QuestionsPage:
         element = self.driver.find_element(*locator)
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
+    def accept_cookies(self):
+        element = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(QuestionLocatorsPage.accept_cookies))
+        element.click()
+
     def click_question(self, question_number):
         locator = getattr(QuestionLocatorsPage, f'question_{question_number}')
         self.driver.find_element(*locator).click()
@@ -28,5 +32,6 @@ class QuestionsPage:
 
     def check_the_answer(self, question_number):
         self.find_question(question_number)
+        self.accept_cookies()
         self.click_question(question_number)
         return self.get_text(question_number)       

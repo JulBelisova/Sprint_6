@@ -5,11 +5,7 @@ from locators.order_locators import OrderLocators
 from pages.order_page import *
 from data import *
 
-class TestCompleteOrder:
-    
-    @classmethod
-    def setup_class(cls):
-        cls.driver = webdriver.Firefox()
+class TestCompleteOrder: 
 
     @pytest.mark.parametrize("data_index", [0])  
     def test_order_via_up_button(self, driver, data_index):

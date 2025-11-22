@@ -6,10 +6,6 @@ from pages.questions_page import *
 
 class TestQuestions:
 
-    @classmethod
-    def setup_class(cls):
-        cls.driver = webdriver.Firefox()
-
     def test_question_1(self, driver):
         question_page = QuestionsPage(driver)
 

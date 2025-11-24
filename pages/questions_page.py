@@ -1,37 +1,34 @@
-from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
+import allure
 from locators.questions_locators import QuestionLocatorsPage
+from .base_page import BasePage
 
-class QuestionsPage:
+class QuestionsPage(BasePage):
     
     def __init__(self, driver): 
-        self.driver = driver 
-
+        super().__init__(driver) 
+    
+    @allure.step('Прокруть вниз до нужного вопроса')
     def find_question(self, question_number):
-        WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(QuestionLocatorsPage.logo))
         locator = getattr(QuestionLocatorsPage, f'question_{question_number}')
-        element = self.driver.find_element(*locator)
-        self.driver.execute_script("arguments[0].scrollIntoView();", element)
+        self.scroll_to_element(locator)
 
+    @allure.step('Принять куки')
     def accept_cookies(self):
-        element = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(QuestionLocatorsPage.accept_cookies))
-        element.click()
+        self.click_element(QuestionLocatorsPage.accept_cookies)
 
+    @allure.step('Кликнуть на вопрос для появления ответа на него')
     def click_question(self, question_number):
         locator = getattr(QuestionLocatorsPage, f'question_{question_number}')
-        self.driver.find_element(*locator).click()
+        self.click_element(locator)
 
-    def get_text(self, question_number):
+    @allure.step('Получить текст ответа')
+    def get_answer_text(self, question_number):
         locator = getattr(QuestionLocatorsPage, f'answer_{question_number}')
-        #return self.driver.find_element(*locator).text
-        #locator = getattr(QuestionLocatorsPage, f'answer_{question_number}')
-        element = self.driver.find_element(*locator)
-        return element.get_attribute("textContent")
+        return self.get_attribute(locator, "textContent")
 
 
     def check_the_answer(self, question_number):
         self.find_question(question_number)
         self.accept_cookies()
         self.click_question(question_number)
-        return self.get_text(question_number)       
+        return self.get_answer_text(question_number)       

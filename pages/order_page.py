@@ -1,57 +1,61 @@
+import allure
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from locators.questions_locators import QuestionLocatorsPage
 from locators.order_locators import OrderLocators
 from selenium.webdriver.common.keys import Keys
+from .base_page import BasePage
 
-class OrderPage:
+class OrderPage(BasePage):
 
     def __init__(self, driver):
-        self.driver = driver
+        super().__init__(driver)
 
+    @allure.step('Принять куки')
     def accept_cookies(self):
-        element = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(QuestionLocatorsPage.accept_cookies))
-        element.click()
+        self.click_element(QuestionLocatorsPage.accept_cookies)
 
+    @allure.step('Кликнуть на кнопку Заказать в верхнем меню')
     def click_up_order(self):
-        self.driver.find_element(*OrderLocators.order_up_button).click()
+        self.click_element(OrderLocators.order_up_button)  
 
+    @allure.step('Кликнуть на кнопку Заказать внизу страницы')
     def click_down_order(self):
-        self.driver.find_element(*OrderLocators.order_down_button).click()
+        self.click_element(OrderLocators.order_down_button)
 
+    @allure.step('Заполнить всю информацию о клиенте')
     def fill_order_form(self, data):
-        WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(OrderLocators.name))
-        self.driver.find_element(*OrderLocators.name).send_keys(data["name"])
-        self.driver.find_element(*OrderLocators.surname).send_keys(data["surname"])
-        self.driver.find_element(*OrderLocators.address).send_keys(data["address"])
+        self.send_keys(OrderLocators.name, data["name"])
+        self.send_keys(OrderLocators.surname, data["surname"])
+        self.send_keys(OrderLocators.address, data["address"])
+        self.send_keys(OrderLocators.subway_station, data["subway"])
+        self.click_element(OrderLocators.subway_station_by_name(data['subway']))
+        self.send_keys(OrderLocators.phone, data["phone"])
 
-        self.driver.find_element(*OrderLocators.subway_station).send_keys(data["subway"])
-        station_option = WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(OrderLocators.subway_station_by_name(data['subway'])))
-        station_option.click()
-    
-        self.driver.find_element(*OrderLocators.phone).send_keys(data["phone"])
-
-
+    @allure.step('Кликнуть Далее')
     def click_next(self):
-        self.driver.find_element(*OrderLocators.next).click()
+        self.click_element(OrderLocators.next)
 
+    @allure.step('Заполнить информацию об аренде')
     def fill_info_about_order(self, data):
-        WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(OrderLocators.when_to_deliver))
-        self.driver.find_element(*OrderLocators.when_to_deliver).send_keys(data["when"])
-        self.driver.find_element(*OrderLocators.when_to_deliver).send_keys(Keys.ESCAPE)
-        self.driver.find_element(*OrderLocators.rental_period).click()
-        self.driver.find_element(*OrderLocators.two_days).click()
-        self.driver.find_element(*OrderLocators.color).click()
+        self.send_keys(OrderLocators.when_to_deliver, data["when"])
+        self.send_keys(OrderLocators.when_to_deliver, Keys.ESCAPE)
+        self.click_element(OrderLocators.rental_period)
+        self.click_element(OrderLocators.two_days)
+        self.click_element(OrderLocators.color)
 
-
+    @allure.step('Кликнуть Заказать')
     def click_final_order(self):
-        self.driver.find_element(*OrderLocators.final_order_button).click()
+        self.click_element(OrderLocators.final_order_button)
 
-
+    @allure.step('Кликнуть на кнопку Да на странице подтверждения заказа')
     def confirm_order(self):
-        element = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(OrderLocators.confirm))
-        element.click()
+        self.click_element(OrderLocators.confirm)
 
+    @allure.step('Проверить что заказ оформлен')
+    def order_created(self):
+        text = self.get_text(OrderLocators.order_created)
+        return 'Заказ оформлен' in text
 
     def full_order_up_button(self, data):
         self.accept_cookies()
@@ -61,6 +65,7 @@ class OrderPage:
         self.fill_info_about_order(data)
         self.click_final_order()
         self.confirm_order()
+
         
     def full_order_down_button(self, data):
         self.accept_cookies()

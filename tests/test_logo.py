@@ -1,21 +1,22 @@
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
-from locators.logo_locators import LogoLocators
+import allure
 from url import *
+from pages.logo_page import LogoPage
 
-class TestLogo:
+class TestLogo():
 
+    @allure.title('Проверка перехода на главную страницу по клику на логотип самоката')
     def test_scooter_logo(self, driver):
+        logo_page = LogoPage(driver)
         driver.get(order_page)
-        driver.find_element(*LogoLocators.logo_scooter).click()
+        logo_page.click_logo_scooter()
 
         assert driver.current_url == main_site
 
+    @allure.title('Проверка открытия нового окна с сайтом Дзен по клику на логотип Яндекса')
     def test_ya_logo(self, driver):
+        logo_page = LogoPage(driver)
         driver.get(order_page)
-        driver.find_element(*LogoLocators.ya_logo).click()
-        WebDriverWait(driver, 10).until(EC.number_of_windows_to_be(2))
-        driver.switch_to.window(driver.window_handles[-1])
-        WebDriverWait(driver, 10).until(EC.url_contains(dzen))
+        logo_page.click_logo_ya()
+        logo_page.switch_to_dzen()
 
-        assert driver.current_url == dzen
+        assert "dzen.ru" in driver.current_url

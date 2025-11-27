@@ -57,6 +57,7 @@ class OrderPage(BasePage):
         text = self.get_text(OrderLocators.order_created)
         return 'Заказ оформлен' in text
 
+    @allure.step("Полное оформление заказа через верхнюю кнопку")
     def full_order_up_button(self, data):
         self.accept_cookies()
         self.click_up_order()
@@ -66,7 +67,7 @@ class OrderPage(BasePage):
         self.click_final_order()
         self.confirm_order()
 
-        
+    @allure.step("Полное оформление заказа через нижнюю кнопку")   
     def full_order_down_button(self, data):
         self.accept_cookies()
         self.click_down_order()

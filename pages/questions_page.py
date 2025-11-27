@@ -26,7 +26,7 @@ class QuestionsPage(BasePage):
         locator = getattr(QuestionLocatorsPage, f'answer_{question_number}')
         return self.get_attribute(locator, "textContent")
 
-
+    @allure.step("Проверить ответ на вопрос №{question_number}")
     def check_the_answer(self, question_number):
         self.find_question(question_number)
         self.accept_cookies()

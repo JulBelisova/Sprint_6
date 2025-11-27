@@ -18,8 +18,8 @@ class LogoPage(BasePage):
 
     @allure.step('Переключиться на окно Дзена')
     def switch_to_dzen(self):
-        self.wait.until(EC.number_of_windows_to_be(2))
-        self.driver.switch_to.window(self.driver.window_handles[-1])
-        self.wait.until(EC.url_contains("dzen.ru"))
+        self.switch_to_another_window()
+        self.wait_for_url_contains("dzen.ru")
+
 
     
